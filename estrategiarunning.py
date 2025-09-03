@@ -119,7 +119,7 @@ if archivo is not None:
     df_interp["tiempo_seg"] = df_interp["ritmo_seg"] * df_interp["dist_segmento"]
     df_interp["tiempo_acum_seg"] = df_interp["tiempo_seg"].cumsum()
 
-    df_interp["ritmo_seg"] = df_interp["ritmo_seg"] * df_interp["factor_fatiga"]
+    #df_interp["ritmo_seg"] = df_interp["ritmo_seg"] * df_interp["factor_fatiga"]
 
     # Conversión a min:seg
     df_interp["ritmo"] = (df_interp["ritmo_seg"] / 60).apply(lambda x: f"{int(x)}:{int((x%1)*60):02d}")
