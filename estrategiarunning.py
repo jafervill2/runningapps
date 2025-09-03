@@ -45,9 +45,7 @@ else:
 # ============================
 archivo = st.file_uploader("Sube el archivo CSV con distancia (km) y altitud (m)", type=["csv"])
 
-# Promedio de altitud del recorrido cargado
-alt_carrera = df_raw["altitud_m"].mean()
-st.info(f"Altitud promedio de la carrera: {alt_carrera:.0f} msnm")
+
 
 if archivo is not None:
     df_raw = pd.read_csv(archivo)
@@ -58,6 +56,9 @@ if archivo is not None:
     # ============================
     # Ajuste por altitud y temperatura
     # ============================
+    # Promedio de altitud del recorrido cargado
+    alt_carrera = df_raw["altitud_m"].mean()
+    st.info(f"Altitud promedio de la carrera: {alt_carrera:.0f} msnm")
     ritmo_seg = ritmo_min_km * 60
     delta_alt = (alt_carrera - alt_entrenamiento) / 1000  # diferencia en km de altitud
     factor_altitud = 1 + delta_alt * 0.02
