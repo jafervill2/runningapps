@@ -67,10 +67,10 @@ if archivo is not None:
 
     ritmo_seg = ritmo_min_km * 60
     delta_alt = (alt_carrera - alt_entrenamiento) / 1000
-    factor_altitud = 1 + delta_alt * 0.02
-    factor_temp = 1 + (temperaturalc - temperaturale) * 0.01
-    st.success(f"{factor_altitud}: {factor_temp} : {factor_altitud + factor_temp}")
-    ritmo_ajustado_base = ritmo_seg * (factor_altitud + factor_temp)
+    factor_altitud =  delta_alt * 0.02/0.3
+    factor_temp = (temperaturalc - temperaturale) * 0.01/5
+    st.success(f"{factor_altitud}: {factor_temp} : {1+(factor_altitud + factor_temp)}")
+    ritmo_ajustado_base = ritmo_seg * (1+(factor_altitud + factor_temp))
 
     # ============================
     # Interpolación de altimetría
