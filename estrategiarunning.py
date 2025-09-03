@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 st.title("Simulador de Ritmo Ajustado por Altimetría y Fatiga")
 
@@ -114,12 +114,3 @@ if file:
 
     st.subheader("Splits ajustados")
     st.dataframe(df_interp[["distancia_km", "altitud_m", "ritmo", "tiempo_split", "tiempo_acum"]])
-
-    # gráfico
-    st.subheader("Ritmo ajustado por distancia")
-    fig, ax = plt.subplots()
-    ax.plot(df_interp["distancia_km"], df_interp["ritmo_seg"] / 60, label="Ritmo ajustado (min/km)")
-    ax.set_xlabel("Distancia (km)")
-    ax.set_ylabel("Ritmo (min/km)")
-    ax.legend()
-    st.pyplot(fig)
