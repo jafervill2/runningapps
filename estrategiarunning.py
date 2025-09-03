@@ -105,12 +105,12 @@ if archivo is not None:
         s = (a / (1 + np.exp(-b * (dist1 - distancia_km)))) - (a / (1 + np.exp(-b * (distancia_km - dist2))))
         return 1 + s  # factor multiplicador
 
-# Aplicación al ritmo ajustado
-df_interp["factor_fatiga"] = df_interp["distancia_km"].apply(
+    # Aplicación al ritmo ajustado
+    df_interp["factor_fatiga"] = df_interp["distancia_km"].apply(
     lambda d: fatiga_ajuste(d, dist_total, a, b)
-)
+    )
 
-df_interp["ritmo_seg"] = df_interp["ritmo_seg"] * df_interp["factor_fatiga"]
+    df_interp["ritmo_seg"] = df_interp["ritmo_seg"] * df_interp["factor_fatiga"]
 
 
     # ============================
