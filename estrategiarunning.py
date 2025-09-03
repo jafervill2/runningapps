@@ -144,6 +144,6 @@ if archivo is not None:
     tiempo_final = df_interp["tiempo_acum_seg"].iloc[-1]/60 
     ritmo_medio=format_hms((tiempo_final)/distancia_max})
     st.success(f"Tiempo estimado total para {distancia_opcion}: {tiempo_final}")
-    st.success(f"Ritmo promedio para {distancia_opcion}: {ritmo_medio")
+    st.success(f"Ritmo promedio para {distancia_opcion}: {ritmo_medio"})
 
    
