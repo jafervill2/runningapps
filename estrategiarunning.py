@@ -69,7 +69,8 @@ if archivo is not None:
     delta_alt = (alt_carrera - alt_entrenamiento) / 1000
     factor_altitud = 1 + delta_alt * 0.02
     factor_temp = 1 + (temperaturalc - temperaturale) * 0.01
-    ritmo_ajustado_base = ritmo_seg * factor_altitud * factor_temp
+    st.success(f"{factor_altitud}: {factor_temp} : {factor_altitud + factor_temp}")
+    ritmo_ajustado_base = ritmo_seg * (factor_altitud + factor_temp)
 
     # ============================
     # Interpolación de altimetría
