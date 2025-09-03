@@ -38,11 +38,7 @@ elif distancia_opcion == "21.095 km":
 else:
     distancia_max = 42.195
 
-# ============================
-# Parámetros de fatiga
-# ============================
-a = st.number_input("Parámetro a (ajuste de fatiga)", min_value=-0.1, max_value=0.1, value=0.0, step=0.01, format="%.2f")
-b = st.number_input("Parámetro b (pendiente de la curva sigmoidal)", min_value=0.01, max_value=10.0, value=1.0, step=0.01, format="%.2f")
+
 
 # ============================
 # Subida de altimetría
@@ -59,6 +55,13 @@ if archivo is not None:
     # ============================
     alt_carrera = df_raw["altitud_m"].mean()
     st.info(f"Altitud promedio de la carrera: {alt_carrera:.0f} msnm")
+
+
+    # ============================
+    # Parámetros de fatiga
+    # ============================
+    a = st.number_input("Parámetro a (ajuste de fatiga)", min_value=-0.1, max_value=0.1, value=0.0, step=0.01, format="%.2f")
+    b = st.number_input("Parámetro b (pendiente de la curva sigmoidal)", min_value=0.01, max_value=10.0, value=1.0, step=0.01, format="%.2f")
 
     ritmo_seg = ritmo_min_km * 60
     delta_alt = (alt_carrera - alt_entrenamiento) / 1000
