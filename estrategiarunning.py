@@ -149,7 +149,7 @@ if archivo is not None:
 
     chart = alt.Chart(df_interp).mark_line().encode(
         x="distancia_km",
-        y="ritmo_seg"/60
+        y="ritmo_seg"
     ).properties(
         title="Ritmo ajustado (s/km)"
     )
