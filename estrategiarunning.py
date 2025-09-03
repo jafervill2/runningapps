@@ -91,7 +91,9 @@ if archivo is not None:
     # ============================
     # Tiempo acumulado
     # ============================
-    df_interp["tiempo_seg"] = df_interp["ritmo_seg"]
+    #df_interp["tiempo_seg"] = df_interp["ritmo_seg"]
+    df_interp["dist_segmento"] = df_interp["distancia_km"].diff().fillna(0)
+    df_interp["tiempo_seg"] = df_interp["ritmo_seg"] * df_interp["dist_segmento"]
     df_interp["tiempo_acum_seg"] = df_interp["tiempo_seg"].cumsum()
 
     # Conversión a min:seg
