@@ -155,11 +155,11 @@ if archivo is not None:
         x=alt.X("distancia_km", title="Distancia (km)"),
         y=alt.Y("value", title="Ritmo (min/km)"),
         color="variable"
-    ).transform_fold(
+        ).transform_fold(
         ["ritmo_min_km", "ritmo_base"],
         as_=["variable", "value"]
-    ).properties(
+        ).properties(
         title="Ritmo Ajustado vs Ritmo Base"
-    )
+        )
 
-    st.altair_chart(chart, use_container_width=True)
+        st.altair_chart(chart, use_container_width=True)
