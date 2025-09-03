@@ -144,21 +144,22 @@ if archivo is not None:
     tiempo_final = df_interp["tiempo_acum"].iloc[-1]
     st.success(f"Tiempo estimado total para {distancia_opcion}: {tiempo_final}")
 
+    import altair as alt
 
-    import plotly.express as px
-
-    # Crear columna de ritmo en min/km (ya lo tienes como string, aquí lo hacemos en valor numérico)
+    # Crear columnas en min/km
     df_interp["ritmo_min_km"] = df_interp["ritmo_seg"] / 60
-
-    # Crear línea del ritmo base (plana)
     df_interp["ritmo_base"] = ritmo_ajustado_base / 60
 
-    # Gráfica con Plotly
-    fig = px.line(df_interp, x="distancia_km", y=["ritmo_min_km", "ritmo_base"],
-              labels={"value": "Ritmo (min/km)", "distancia_km": "Distancia (km)"},
-              title="Ritmo Ajustado vs Ritmo Base")
+    # Gráfico Altair
+    chart = alt.Chart(df_interp).mark_line().encode(
+        x=alt.X("distancia_km", title="Distancia (km)"),
+        y=alt.Y("value", title="Ritmo (min/km)"),
+        color="variable"
+    ).transform_fold(
+        ["ritmo_min_km", "ritmo_base"],
+        as_=["variable", "value"]
+    ).properties(
+        title="Ritmo Ajustado vs Ritmo Base"
+    )
 
-    # Ajustar nombres de las líneas
-    fig.for_each_trace(lambda t: t.update(name="Ritmo Ajustado" if t.name == "ritmo_min_km" else "Ritmo Base"))
-
-    st.plotly_chart(fig, use_container_width=True)
+    st.altair_chart(chart, use_container_width=True)
