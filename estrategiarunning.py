@@ -144,22 +144,4 @@ if archivo is not None:
     tiempo_final = df_interp["tiempo_acum"].iloc[-1]
     st.success(f"Tiempo estimado total para {distancia_opcion}: {tiempo_final}")
 
-    import altair as alt
-
-    # Crear columnas en min/km
-    df_interp["ritmo_min_km"] = df_interp["ritmo_seg"] / 60
-    df_interp["ritmo_base"] = ritmo_ajustado_base / 60
-
-    # Gráfico Altair
-    chart = alt.Chart(df_interp).mark_line().encode(
-        x=alt.X("distancia_km", title="Distancia (km)"),
-        y=alt.Y("value", title="Ritmo (min/km)"),
-        color="variable"
-        ).transform_fold(
-        ["ritmo_min_km", "ritmo_base"],
-        as_=["variable", "value"]
-        ).properties(
-        title="Ritmo Ajustado vs Ritmo Base"
-        )
-
-        st.altair_chart(chart, use_container_width=True)
+   
