@@ -133,7 +133,7 @@ if archivo is not None:
     st.dataframe(    df_interp[["distancia_km", "altitud_m", "pendiente_%", "ritmo", "tiempo_acum"]]
         .style.format({
             "distancia_km": "{:.1f}",
-            "altitud_m": "{:.0f}",
+            "altitud_m": "{:.1f}",
             "pendiente_%": "{:.1f}"
         })
     )
