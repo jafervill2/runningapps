@@ -62,7 +62,7 @@ if archivo is not None:
     # ============================
     # Parámetros de fatiga
     # ============================
-    a = st.number_input("Parámetro a (ajuste de fatiga)", min_value=-10.0, max_value=10.0, value=0.0, step=0.5, format="%.2f")
+    a = st.number_input("Parámetro a (ajuste de fatiga)%", min_value=-10.0, max_value=10.0, value=0.0, step=0.5, format="%.2f")
     b = st.number_input("Parámetro b (pendiente de la curva sigmoidal)", min_value=0.01, max_value=10.0, value=1.0, step=0.01, format="%.2f")
 
     
@@ -70,9 +70,9 @@ if archivo is not None:
     delta_alt = (alt_carrera - alt_entrenamiento) / 1000
     factor_altitud =  delta_alt * 0.02/0.3
     factor_temp = (temperaturalc - temperaturale) * 0.01/5
-    st.success(f"{factor_altitud}: {factor_temp} : {1+(factor_altitud + factor_temp)}")
     ritmo_ajustado_base = ritmo_seg * (1+(factor_altitud + factor_temp))
-
+    #st.success(f"{factor_altitud}: {factor_temp} : {ritmo_ajustado_base)}")
+    
     # ============================
     # Interpolación de altimetría
     # ============================
