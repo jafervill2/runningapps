@@ -130,7 +130,12 @@ if archivo is not None:
     st.subheader("Splits calculados")
     #st.dataframe(df_interp[["distancia_km", "altitud_m", "pendiente_%", "ritmo min/Km", "tiempo_acum"]])
 
-    st.dataframe(df_interp[["distancia_km", "altitud_m", "pendiente_%", "ritmo", "tiempo_acum"]].style.format({"pendiente_%": "{:.1f}"})
+    st.dataframe(    df_interp[["distancia_km", "altitud_m", "pendiente_%", "ritmo", "tiempo_acum"]]
+        .style.format({
+            "distancia_km": "{:.1f}",
+            "altitud_m": "{:.0f}",
+            "pendiente_%": "{:.1f}"
+        })
     )
 
 
