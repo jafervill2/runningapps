@@ -1,116 +1,128 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-#import matplotlib.pyplot as plt
 
-st.title("Simulador de Ritmo Ajustado por Altimetría y Fatiga")
+st.title("Simulador de Ritmo Ajustado por Pendiente y Altitud")
 
-# ==============================
-# ENTRADAS MANUALES
-# ==============================
+# ============================
+# Entradas de usuario
+# ============================
+st.write("Ingresa tu tiempo ideal de carrera")
 
-# Ritmo en min y seg
 col1, col2 = st.columns(2)
-ritmo_min = col1.number_input("Ritmo objetivo (min)", min_value=2, max_value=10, value=5, step=1)
-ritmo_seg = col2.number_input("Ritmo objetivo (seg)", min_value=0, max_value=59, value=0, step=1)
-ritmo_objetivo = ritmo_min + ritmo_seg / 60
 
-# Altura entrenamiento
-alt_entren = st.number_input("Altura de entrenamiento (msnm)", min_value=0, max_value=5000, value=1000, step=50)
+ritmo_min = col1.number_input("Minutos por km", min_value=0, max_value=20, value=5, step=1)
+ritmo_seg = col2.number_input("Segundos", min_value=0, max_value=59, value=0, step=1)
 
-# Distancia de carrera
-distancia_op = st.selectbox("Selecciona la distancia", ["10 km", "21.095 km", "42.195 km"])
-dist_total = {"10 km": 10.0, "21.095 km": 21.095, "42.195 km": 42.195}[distancia_op]
+# Convertir a decimal en minutos
+ritmo_min_km = ritmo_min + ritmo_seg / 60
 
-# Parámetros de fatiga
-a = st.number_input("Parámetro a (ajuste de fatiga)", min_value=-0.1, max_value=0.1, value=0.0, step=0.01, format="%.2f")
-b = st.number_input("Parámetro b (pendiente de la curva sigmoidal)", min_value=0.01, max_value=10.0, value=1.0, step=0.01, format="%.2f")
+st.write(f"Tu ritmo es: {ritmo_min}:{ritmo_seg:02d} min/km")
+#ritmo_min_km = st.number_input("Ritmo objetivo (min/km)", min_value=2.0, max_value=10.0, value=5.0, step=0.1)
+#altitud = st.number_input("Altitud de la carrera (msnm)", min_value=0, max_value=5000, value=2000, step=100)
+# Entrada del usuario: altitud de entrenamiento
+alt_entrenamiento = st.number_input("Altitud de entrenamiento (msnm)", min_value=0, max_value=5000, value=500, step=100)
 
-# ==============================
-# CARGA DE ALTIMETRÍA
-# ==============================
 
-file = st.file_uploader("Carga el archivo CSV de altimetría", type=["csv"])
-if file:
-    df_raw = pd.read_csv(file)
-    df_raw.columns = ["distancia_km", "altitud_m"]
+temperatura = st.number_input("Temperatura (°C)", min_value=-10, max_value=40, value=15, step=1)
 
-    # altura promedio de la carrera
-    alt_prom = df_raw["altitud_m"].mean()
+distancia_opcion = st.selectbox(
+    "Selecciona la distancia de carrera",
+    options=["10 km", "21.095 km", "42.195 km"],
+    index=2
+)
 
-    # interpolar a cada km hasta la distancia total
-    kms = np.arange(0, dist_total + 0.001, 1.0)
-    df_interp = pd.DataFrame({
-        "distancia_km": kms,
-        "altitud_m": np.interp(kms, df_raw["distancia_km"], df_raw["altitud_m"])
-    })
+# Convertir selección a número
+if distancia_opcion == "10 km":
+    distancia_max = 10.0
+elif distancia_opcion == "21.095 km":
+    distancia_max = 21.095
+else:
+    distancia_max = 42.195
 
-    # pendiente %
-    df_interp["pendiente_%"] = df_interp["altitud_m"].diff().fillna(0)
+# ============================
+# Subida de altimetría
+# ============================
+archivo = st.file_uploader("Sube el archivo CSV con distancia (km) y altitud (m)", type=["csv"])
 
-    # ritmo base en seg/km
-    ritmo_seg_base = ritmo_objetivo * 60
 
-    # ajuste por altitud relativa
-    ajuste_alt = 1 + (df_interp["altitud_m"] - alt_entren) / 10000
-    df_interp["ritmo_seg"] = ritmo_seg_base * ajuste_alt
 
-    # ==============================
-    # AJUSTE POR FATIGA
-    # ==============================
+if archivo is not None:
+    df_raw = pd.read_csv(archivo)
+    st.subheader("Altimetría cargada")
+    #st.dataframe(df_raw.head())
+    st.dataframe(df_raw, height=600)
 
-    def fatiga_ajuste(distancia_km, dist_total, a, b):
-        dist1 = dist_total / 3
-        dist2 = 2 * dist1
-        s = (a / (1 + np.exp(-b * (dist1 - distancia_km)))) - \
-            (a / (1 + np.exp(-b * (distancia_km - dist2))))
-        return 1 + s
 
-    df_interp["factor_fatiga"] = df_interp["distancia_km"].apply(
-        lambda d: fatiga_ajuste(d, dist_total, a, b)
-    )
-    df_interp["ritmo_seg"] *= df_interp["factor_fatiga"]
+    # ============================
+    # Ajuste por altitud y temperatura
+    # ============================
+    # Promedio de altitud del recorrido cargado
+    alt_carrera = df_raw["altitud_m"].mean()
+    st.info(f"Altitud promedio de la carrera: {alt_carrera:.0f} msnm")
+    ritmo_seg = ritmo_min_km * 60
+    delta_alt = (alt_carrera - alt_entrenamiento) / 1000  # diferencia en km de altitud
+    factor_altitud = 1 + delta_alt * 0.02
+    #factor_altitud = 1 + (altitud / 1000) * 0.02
+    factor_temp = 1 + max(0, (temperatura - 15)) * 0.01
+    ritmo_ajustado_base = ritmo_seg * factor_altitud * factor_temp
 
-    # ==============================
-    # CÁLCULO DE TIEMPOS
-    # ==============================
+    # ============================
+    # Interpolación de altimetría
+    # ============================
+    distancias_objetivo = np.arange(0, int(distancia_max) + 1, 1)
+    if distancias_objetivo[-1] < distancia_max:
+        distancias_objetivo = np.append(distancias_objetivo, distancia_max)
 
-    # formato de ritmo mm:ss
-    def format_pace(segundos):
-        m = int(segundos // 60)
-        s = int(segundos % 60)
-        return f"{m:02d}:{s:02d}"
+    df_interp = pd.DataFrame({"distancia_km": distancias_objetivo})
+    df_interp["altitud_m"] = np.interp(distancias_objetivo, df_raw["distancia_km"], df_raw["altitud_m"])
 
-    # formato hh:mm:ss
+    # ============================
+    # Cálculo de pendiente
+    # ============================
+    df_interp["pendiente_%"] = df_interp["altitud_m"].diff() / df_interp["distancia_km"].diff() #* 100
+    df_interp["pendiente_%"] = df_interp["pendiente_%"].fillna(0)
+
+    # ============================
+    # Ajuste de ritmo por pendiente
+    # ============================
+    factor_pendiente = 18/60 #0.03  # sensibilidad
+    df_interp["ritmo_seg"] = ritmo_ajustado_base * (1 + df_interp["pendiente_%"] / 100 * factor_pendiente)
+
+
+    # ============================
+    # Tiempo acumulado
+    # ============================
+    #df_interp["tiempo_seg"] = df_interp["ritmo_seg"]
+    df_interp["dist_segmento"] = df_interp["distancia_km"].diff().fillna(0)
+    df_interp["tiempo_seg"] = df_interp["ritmo_seg"] * df_interp["dist_segmento"]
+    df_interp["tiempo_acum_seg"] = df_interp["tiempo_seg"].cumsum()
+
+
+    # Conversión a min:seg
+    df_interp["ritmo"] = (df_interp["ritmo_seg"] / 60).apply(lambda x: f"{int(x)}:{int((x%1)*60):02d}")
+
+
     def format_hms(segundos):
         h = int(segundos // 3600)
         m = int((segundos % 3600) // 60)
         s = int(segundos % 60)
         return f"{h:02d}:{m:02d}:{s:02d}"
 
-    # distancia del split
-    df_interp["dist_segmento"] = df_interp["distancia_km"].diff().fillna(0)
-
-    # tiempo del split
-    df_interp["tiempo_seg"] = df_interp["ritmo_seg"] * df_interp["dist_segmento"]
-    df_interp["tiempo_split"] = df_interp["tiempo_seg"].apply(format_hms)
-
-    # tiempo acumulado
-    df_interp["tiempo_acum_seg"] = df_interp["tiempo_seg"].cumsum()
+    #df_interp["tiempo_acum_seg"] = df_interp["tiempo_seg"].cumsum()
     df_interp["tiempo_acum"] = df_interp["tiempo_acum_seg"].apply(format_hms)
+    #df_interp["tiempo_acum"] = (df_interp["tiempo_acum_seg"] / 60).apply(lambda x: f"{int(x)}:{int((x%1)*60):02d}")
 
-    # ritmo mostrado
-    df_interp["ritmo"] = df_interp["ritmo_seg"].apply(format_pace)
 
-    # ==============================
-    # SALIDA
-    # ==============================
 
-    st.subheader("Primeras 10 filas de altimetría")
-    st.dataframe(df_raw.head(10))
 
-    st.subheader("Últimas 10 filas de altimetría")
-    st.dataframe(df_raw.tail(10))
+    
 
-    st.subheader("Splits ajustados")
-    st.dataframe(df_interp[["distancia_km", "altitud_m", "ritmo", "tiempo_split", "tiempo_acum"]])
+    # ============================
+    # Mostrar resultados
+    # ============================
+    st.subheader("Splits calculados")
+    st.dataframe(df_interp[["distancia_km", "altitud_m", "pendiente_%", "ritmo", "tiempo_acum"]])
+
+    tiempo_final = df_interp["tiempo_acum"].iloc[-1]
+    st.success(f"Tiempo estimado total para {distancia_opcion}: {tiempo_final}")
