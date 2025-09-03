@@ -97,6 +97,22 @@ if archivo is not None:
     factor_pendiente = 18/60 #0.03  # sensibilidad
     df_interp["ritmo_seg"] = ritmo_ajustado_base * (1 + df_interp["pendiente_%"] / 100 * factor_pendiente)
 
+
+    # Función de ajuste por fatiga
+    def fatiga_ajuste(distancia_km, dist_total, a, b):
+        dist1 = dist_total / 3
+        dist2 = 2 * dist1
+        s = (a / (1 + np.exp(-b * (dist1 - distancia_km)))) - (a / (1 + np.exp(-b * (distancia_km - dist2))))
+        return 1 + s  # factor multiplicador
+
+# Aplicación al ritmo ajustado
+df_interp["factor_fatiga"] = df_interp["distancia_km"].apply(
+    lambda d: fatiga_ajuste(d, dist_total, a, b)
+)
+
+df_interp["ritmo_seg"] = df_interp["ritmo_seg"] * df_interp["factor_fatiga"]
+
+
     # ============================
     # Tiempo acumulado
     # ============================
