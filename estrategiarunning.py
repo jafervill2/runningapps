@@ -23,18 +23,19 @@ st.write(f"Tu ritmo es: {ritmo_min}:{ritmo_seg:02d} min/km")
 # Entrada del usuario: altitud de entrenamiento
 alt_entrenamiento = st.number_input("Altitud de entrenamiento (msnm)", min_value=0, max_value=5000, value=500, step=100)
 
-temperatura = st.number_input("Temperatura (°C)", min_value=-10, max_value=40, value=15, step=1)
+temperaturale = st.number_input("Temperatura entrenamiento (°C)", min_value=-10, max_value=40, value=15, step=1)
+temperaturalc = st.number_input("Temperatura carrera (°C)", min_value=-10, max_value=40, value=15, step=1)
 
 distancia_opcion = st.selectbox(
     "Selecciona la distancia de carrera",
-    options=["10 km", "21.095 km", "42.195 km"],
+    options=["10 Km", "21.095 Km", "42.195 Km"],
     index=2
 )
 
 # Convertir selección a número
-if distancia_opcion == "10 km":
+if distancia_opcion == "10 Km":
     distancia_max = 10.0
-elif distancia_opcion == "21.095 km":
+elif distancia_opcion == "21.095 Km":
     distancia_max = 21.095
 else:
     distancia_max = 42.195
@@ -67,7 +68,7 @@ if archivo is not None:
     ritmo_seg = ritmo_min_km * 60
     delta_alt = (alt_carrera - alt_entrenamiento) / 1000
     factor_altitud = 1 + delta_alt * 0.02
-    factor_temp = 1 + max(0, (temperatura - 15)) * 0.01
+    factor_temp = 1 + max(0, (temperaturalc - temperaturale)) * 0.01
     ritmo_ajustado_base = ritmo_seg * factor_altitud * factor_temp
 
     # ============================
@@ -145,6 +146,6 @@ if archivo is not None:
     tiempo_final_seg = df_interp["tiempo_acum_seg"].iloc[-1]
     ritmo_medio=format_hms(tiempo_final_seg/distancia_max)
     st.success(f"Tiempo estimado total para {distancia_opcion}: {tiempo_final}")
-    st.success(f"Ritmo promedio para {distancia_opcion}: {ritmo_medio}")
+    st.success(f"Ritmo promedio para {distancia_opcion}: {ritmo_medio} min/Km")
 
    
