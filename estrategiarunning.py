@@ -63,7 +63,6 @@ if archivo is not None:
     # Parámetros de fatiga
     # ============================
     a = st.number_input("Parámetro a (ajuste de fatiga)", min_value=-10, max_value=10, value=0.0, step=0.5, format="%.2f")
-    a = a/100
     b = st.number_input("Parámetro b (pendiente de la curva sigmoidal)", min_value=0.01, max_value=10.0, value=1.0, step=0.01, format="%.2f")
 
     
@@ -107,7 +106,7 @@ if archivo is not None:
         return 1 + s
 
     df_interp["factor_fatiga"] = df_interp["distancia_km"].apply(
-        lambda d: fatiga_ajuste(d, distancia_max, a, b)
+        lambda d: fatiga_ajuste(d, distancia_max, a/100, b)
     )
     df_interp["ritmo_seg"] *= df_interp["factor_fatiga"]
 
