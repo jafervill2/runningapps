@@ -44,7 +44,8 @@ archivo = st.file_uploader("Sube el archivo CSV con distancia (km) y altitud (m)
 if archivo is not None:
     df_raw = pd.read_csv(archivo)
     st.subheader("Altimetría cargada")
-    st.dataframe(df_raw.head())
+    #st.dataframe(df_raw.head())
+    st.dataframe(df_raw, height=600)
 
     # ============================
     # Ajuste por altitud y temperatura
