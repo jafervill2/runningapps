@@ -110,6 +110,28 @@ if archivo is not None:
     df_interp["tiempo_acum"] = df_interp["tiempo_acum_seg"].apply(format_hms)
     #df_interp["tiempo_acum"] = (df_interp["tiempo_acum_seg"] / 60).apply(lambda x: f"{int(x)}:{int((x%1)*60):02d}")
 
+
+
+    # Entradas manuales
+    
+    a = st.number_input("Parámetro a (ajuste de fatiga)", min_value=-0.1, max_value=0.1,      value=0.0, step=0.01, format="%.2f")
+    b = st.number_input("Parámetro b (pendiente de la curva sigmoidal)", min_value=0.01, max_value=10.0, value=1.0, step=0.01, format="%.2f")
+
+    # Función de ajuste por fatiga
+    def fatiga_ajuste(distancia_km, dist_total, a, b):
+        dist1 = dist_total / 3
+        dist2 = 2 * dist1
+        s = (a / (1 + np.exp(-b * (dist1 - distancia_km)))) - \
+        (a / (1 + np.exp(-b * (distancia_km - dist2))))
+        return 1 + s  # factor multiplicador
+
+    # Aplicación al ritmo ajustado
+    df_interp["factor_fatiga"] = df_interp["distancia_km"].apply(
+    lambda d: fatiga_ajuste(d, dist_total, a, b)
+)
+
+    df_interp["ritmo_seg"] = df_interp["ritmo_seg"] * df_interp["factor_fatiga"]
+
     # ============================
     # Mostrar resultados
     # ============================
