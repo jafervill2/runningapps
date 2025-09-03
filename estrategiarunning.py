@@ -143,5 +143,6 @@ if archivo is not None:
 
     tiempo_final = df_interp["tiempo_acum"].iloc[-1]
     st.success(f"Tiempo estimado total para {distancia_opcion}: {tiempo_final}")
+    st.success(f"Ritmo promedio para {distancia_opcion}: {distancia_max/tiempo_final}")
 
    
