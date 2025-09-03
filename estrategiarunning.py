@@ -128,7 +128,12 @@ if archivo is not None:
     # Mostrar resultados
     # ============================
     st.subheader("Splits calculados")
-    st.dataframe(df_interp[["distancia_km", "altitud_m", "pendiente_%", "ritmo", "tiempo_acum"]])
+    #st.dataframe(df_interp[["distancia_km", "altitud_m", "pendiente_%", "ritmo min/Km", "tiempo_acum"]])
+
+    st.dataframe(df_interp[["distancia_km", "altitud_m", "pendiente_%", "ritmo", "tiempo_acum"]].style.format({"pendiente_%": "{:.1f}"})
+    )
+
+
 
     tiempo_final = df_interp["tiempo_acum"].iloc[-1]
     st.success(f"Tiempo estimado total para {distancia_opcion}: {tiempo_final}")
