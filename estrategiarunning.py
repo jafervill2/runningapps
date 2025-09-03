@@ -23,8 +23,8 @@ st.write(f"Tu ritmo es: {ritmo_min}:{ritmo_seg:02d} min/km")
 # Entrada del usuario: altitud de entrenamiento
 alt_entrenamiento = st.number_input("Altitud de entrenamiento (msnm)", min_value=0, max_value=5000, value=500, step=100)
 
-temperaturale = st.number_input("Temperatura entrenamiento (°C)", min_value=-10, max_value=40, value=15, step=1)
-temperaturalc = st.number_input("Temperatura carrera (°C)", min_value=-10, max_value=40, value=15, step=1)
+temperaturale = st.number_input("Temperatura entrenamiento (°C)", min_value=12, max_value=40, value=25, step=1)
+temperaturalc = st.number_input("Temperatura carrera (°C)", min_value=12, max_value=40, value=25, step=1)
 
 distancia_opcion = st.selectbox(
     "Selecciona la distancia de carrera",
@@ -68,7 +68,7 @@ if archivo is not None:
     ritmo_seg = ritmo_min_km * 60
     delta_alt = (alt_carrera - alt_entrenamiento) / 1000
     factor_altitud = 1 + delta_alt * 0.02
-    factor_temp = 1 + max(0, (temperaturalc - temperaturale)) * 0.01
+    factor_temp = 1 + (temperaturalc - temperaturale) * 0.01
     ritmo_ajustado_base = ritmo_seg * factor_altitud * factor_temp
 
     # ============================
