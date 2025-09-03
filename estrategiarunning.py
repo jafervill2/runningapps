@@ -85,7 +85,7 @@ if archivo is not None:
     # ============================
     # Ajuste de ritmo por pendiente
     # ============================
-    factor_pendiente = 1#0.03  # sensibilidad
+    factor_pendiente = 18/60 #0.03  # sensibilidad
     df_interp["ritmo_seg"] = ritmo_ajustado_base * (1 + df_interp["pendiente_%"] / 100 * factor_pendiente)
 
     # ============================
