@@ -19,7 +19,11 @@ ritmo_min_km = ritmo_min + ritmo_seg / 60
 
 st.write(f"Tu ritmo es: {ritmo_min}:{ritmo_seg:02d} min/km")
 #ritmo_min_km = st.number_input("Ritmo objetivo (min/km)", min_value=2.0, max_value=10.0, value=5.0, step=0.1)
-altitud = st.number_input("Altitud de la carrera (msnm)", min_value=0, max_value=5000, value=2000, step=100)
+#altitud = st.number_input("Altitud de la carrera (msnm)", min_value=0, max_value=5000, value=2000, step=100)
+# Entrada del usuario: altitud de entrenamiento
+alt_entrenamiento = st.number_input("Altitud de entrenamiento (msnm)", min_value=0, max_value=5000, value=500, step=100)
+
+
 temperatura = st.number_input("Temperatura (°C)", min_value=-10, max_value=40, value=15, step=1)
 
 distancia_opcion = st.selectbox(
@@ -41,6 +45,10 @@ else:
 # ============================
 archivo = st.file_uploader("Sube el archivo CSV con distancia (km) y altitud (m)", type=["csv"])
 
+# Promedio de altitud del recorrido cargado
+alt_carrera = df_raw["altitud_m"].mean()
+st.info(f"Altitud promedio de la carrera: {alt_carrera:.0f} msnm")
+
 if archivo is not None:
     df_raw = pd.read_csv(archivo)
     st.subheader("Altimetría cargada")
@@ -51,7 +59,9 @@ if archivo is not None:
     # Ajuste por altitud y temperatura
     # ============================
     ritmo_seg = ritmo_min_km * 60
-    factor_altitud = 1 + (altitud / 1000) * 0.02
+    delta_alt = (alt_carrera - alt_entrenamiento) / 1000  # diferencia en km de altitud
+    factor_altitud = 1 + delta_alt * 0.02
+    #factor_altitud = 1 + (altitud / 1000) * 0.02
     factor_temp = 1 + max(0, (temperatura - 15)) * 0.01
     ritmo_ajustado_base = ritmo_seg * factor_altitud * factor_temp
 
