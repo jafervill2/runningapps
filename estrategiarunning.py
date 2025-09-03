@@ -10,6 +10,8 @@ st.title("Simulador de Ritmo Ajustado por Pendiente y Altitud")
 
 col1, col2 = st.columns(2)
 
+st.write("Ingresa tu tiempo ideal de carrera")
+
 ritmo_min = col1.number_input("Minutos por km", min_value=0, max_value=20, value=5, step=1)
 ritmo_seg = col2.number_input("Segundos", min_value=0, max_value=59, value=0, step=1)
 
