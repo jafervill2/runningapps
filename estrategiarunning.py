@@ -143,3 +143,15 @@ if archivo is not None:
 
     tiempo_final = df_interp["tiempo_acum"].iloc[-1]
     st.success(f"Tiempo estimado total para {distancia_opcion}: {tiempo_final}")
+
+
+    import altair as alt
+
+    chart = alt.Chart(df_interp).mark_line().encode(
+        x="distancia_km",
+        y="ritmo_seg"
+    ).properties(
+        title="Ritmo ajustado (s/km)"
+    )
+
+    st.altair_chart(chart, use_container_width=True)
