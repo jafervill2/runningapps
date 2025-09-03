@@ -56,7 +56,7 @@ if archivo is not None:
     # ============================
     # Cálculo de pendiente
     # ============================
-    df_interp["pendiente_%"] = df_interp["altitud_m"].diff() / df_interp["distancia_km"].diff() * 100
+    df_interp["pendiente_%"] = df_interp["altitud_m"].diff() / df_interp["distancia_km"].diff() #* 100
     df_interp["pendiente_%"] = df_interp["pendiente_%"].fillna(0)
 
     # ============================
