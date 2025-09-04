@@ -56,12 +56,12 @@ if modo == "Carrera predefinida":
     )
 
     # Archivos que debes tener en tu repo dentro de la carpeta "data"
-    if opcion == "10 km":
-        archivo = "medellin1k.csv"
-    elif opcion == "21.095 km":
-        archivo = "medellin21k.csv"
+    if opcion == "Medellin 10 km":
+        archivo = "data/medellin1k.csv"
+    elif opcion == "Medellin 21.095 km":
+        archivo = "data/medellin21k.csv"
     else:
-        archivo = "medellin42k.csv"
+        archivo = "data/medellin42k.csv"
 
     df_raw = pd.read_csv(archivo)
 
