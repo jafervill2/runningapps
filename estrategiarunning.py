@@ -40,40 +40,16 @@ elif distancia_opcion == "21.095 Km":
 else:
     distancia_max = 42.195
 
-
-
 # ============================
-# Selección de altimetría
+# Subida de altimetría
 # ============================
-modo = st.radio("Selecciona modo:", ["Carrera predefinida", "Subir archivo"])
+archivo = st.file_uploader("Sube el archivo CSV con distancia (km) y altitud (m)", type=["csv"])
 
-df_raw = None  # Inicializamos vacío
-
-if modo == "Carrera predefinida":
-    opcion = st.selectbox(
-        "Selecciona la carrera",
-        ["10 km", "21.095 km", "42.195 km"]
-    )
-
-    # Archivos que debes tener en tu repo dentro de la carpeta "data"
-    if opcion == "Medellin 10 km":
-        archivo = "data/medellin1k.csv"
-    elif opcion == "Medellin 21.095 km":
-        archivo = "data/medellin21k.csv"
-    else:
-        archivo = "data/medellin42k.csv"
-
+if archivo is not None:
     df_raw = pd.read_csv(archivo)
-
-else:
-    archivo = st.file_uploader("Sube tu archivo CSV con distancia (km) y altitud (m)", type=["csv"])
-    if archivo is not None:
-        df_raw = pd.read_csv(archivo)
-
-# Mostrar la altimetría cargada si existe
-if df_raw is not None:
     st.subheader("Altimetría cargada")
     st.dataframe(df_raw, height=600)
+
 
 
     # ============================
