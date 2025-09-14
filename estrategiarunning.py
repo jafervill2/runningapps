@@ -118,7 +118,7 @@ if archivo is not None:
     df_interp["tiempo_acum_seg"] = df_interp["tiempo_seg"].cumsum()
 
     # Formatos
-    df_interp["ritmo"] = (df_interp["ritmo_seg"] / 60).apply(lambda x: f"{int(x)}:{int((x%1)*60):02d}")
+    df_interp["ritmo"] = (df_interp["ritmo_seg"] / 60).apply(lambda x: f"{00}:{int(x)}:{int((x%1)*60):02d}")
 
     def format_hms(segundos):
         h = int(segundos // 3600)
