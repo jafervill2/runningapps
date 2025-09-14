@@ -40,8 +40,6 @@ elif distancia_opcion == "21.095 Km":
 else:
     distancia_max = 42.195
 
-
-
 # ============================
 # Subida de altimetría
 # ============================
@@ -51,6 +49,8 @@ if archivo is not None:
     df_raw = pd.read_csv(archivo)
     st.subheader("Altimetría cargada")
     st.dataframe(df_raw, height=600)
+
+
 
     # ============================
     # Ajuste por altitud y temperatura
