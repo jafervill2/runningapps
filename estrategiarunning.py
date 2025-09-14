@@ -125,7 +125,7 @@ if archivo is not None:
         m = int((segundos % 3600) // 60)
         s = int(segundos % 60)
         return f"{h:02d}:{m:02d}:{s:02d}"
-    df_interp["ritmo"] = (df_interp["ritmo_seg"] / 60).apply(lambda x: f"{00}:{int(x)}:{int((x%1)*60):02d}")
+    df_interp["ritmo"] = (df_interp["ritmo_seg"] / 60).apply(lambda x: f"{00:02d}:{int(x):02d}:{int((x%1)*60):02d}")
     df_interp["tiempo_acum"] = df_interp["tiempo_acum_seg"].apply(format_hms)
     
     # ============================
