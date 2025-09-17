@@ -20,7 +20,7 @@ st.write("Ingresa tu tiempo ideal de carrera")
 col1, col2 = st.columns(2)
 
 ritmo_min = col1.number_input("Minutos por km", min_value=0, max_value=20, value=5, step=1)
-ritmo_seg = col2.number_input("Segundos", min_value=0, max_value=59, value=0, step=1)
+ritmo_seg = col2.number_input("Segundos", min_value=0, max_value=59, value=0, step=0.25)
 
 # Convertir a decimal en minutos
 ritmo_min_km = ritmo_min + ritmo_seg / 60
@@ -42,6 +42,10 @@ else:
     distancia_max = 42.195
 tiempo_base= format_hms(distancia_max*ritmo_min_km*60)
 st.write(f"Tu tiempo base es: {tiempo_base}")# {ritmo_min}:{ritmo_seg:02d} min/km")
+
+st.write("Para realizar cálculos de ajuste por altura y temperatura:")
+
+
 
 # Entrada del usuario: altitud de entrenamiento
 alt_entrenamiento = st.number_input("Altitud de entrenamiento (msnm)", min_value=0, max_value=5000, value=500, step=100)
