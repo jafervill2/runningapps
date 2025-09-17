@@ -5,6 +5,13 @@ import numpy as np
 
 st.title("Simulador de Ritmo Ajustado por Pendiente y Altitud")
 
+def format_hms(segundos):
+    h = int(segundos // 3600)
+    m = int((segundos % 3600) // 60)
+    s = int(segundos % 60)
+    return f"{h:02d}:{m:02d}:{s:02d}"
+
+
 # ============================
 # Entradas de usuario
 # ============================
@@ -136,11 +143,7 @@ if archivo is not None:
     # Formatos
    
 
-    def format_hms(segundos):
-        h = int(segundos // 3600)
-        m = int((segundos % 3600) // 60)
-        s = int(segundos % 60)
-        return f"{h:02d}:{m:02d}:{s:02d}"
+    
     df_interp["ritmo"] = (df_interp["ritmo_seg"] / 60).apply(lambda x: f"{00:02d}:{int(x):02d}:{int((x%1)*60):02d}")
     df_interp["tiempo_acum"] = df_interp["tiempo_acum_seg"].apply(format_hms)
     
