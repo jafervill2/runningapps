@@ -40,7 +40,7 @@ elif distancia_opcion == "21.095 Km":
     distancia_max = 21.095
 else:
     distancia_max = 42.195
-tiempo_base= format_hms(distancia_max*ritmo_min_km/60)
+tiempo_base= format_hms(distancia_max*ritmo_min_km)
 st.write(f"Tu tiempo base es: {tiempo_base}")# {ritmo_min}:{ritmo_seg:02d} min/km")
 
 # Entrada del usuario: altitud de entrenamiento
