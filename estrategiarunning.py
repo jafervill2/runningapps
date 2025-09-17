@@ -18,7 +18,7 @@ ritmo_seg = col2.number_input("Segundos", min_value=0, max_value=59, value=0, st
 # Convertir a decimal en minutos
 ritmo_min_km = ritmo_min + ritmo_seg / 60
 
-st.write(f"Tu ritmo base es: ritmo_min_km# {ritmo_min}:{ritmo_seg:02d} min/km")
+st.write(f"Tu ritmo base es: {ritmo_min}:{ritmo_seg:02d} min/km")
 
 distancia_opcion = st.selectbox(
     "Selecciona la distancia de carrera",
@@ -34,7 +34,7 @@ elif distancia_opcion == "21.095 Km":
 else:
     distancia_max = 42.195
 tiempo_base= distancia_max*ritmo_min_km
-st.write(f"Tu tiempo base es: tiempo_base# {ritmo_min}:{ritmo_seg:02d} min/km")
+st.write(f"Tu tiempo base es: {tiempo_base})# {ritmo_min}:{ritmo_seg:02d} min/km")
 
 # Entrada del usuario: altitud de entrenamiento
 alt_entrenamiento = st.number_input("Altitud de entrenamiento (msnm)", min_value=0, max_value=5000, value=500, step=100)
