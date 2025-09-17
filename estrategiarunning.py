@@ -20,12 +20,6 @@ ritmo_min_km = ritmo_min + ritmo_seg / 60
 
 st.write(f"Tu ritmo es: {ritmo_min}:{ritmo_seg:02d} min/km")
 
-# Entrada del usuario: altitud de entrenamiento
-alt_entrenamiento = st.number_input("Altitud de entrenamiento (msnm)", min_value=0, max_value=5000, value=500, step=100)
-
-temperaturale = st.number_input("Temperatura entrenamiento (°C)", min_value=12, max_value=40, value=25, step=1)
-temperaturalc = st.number_input("Temperatura carrera (°C)", min_value=12, max_value=40, value=25, step=1)
-
 distancia_opcion = st.selectbox(
     "Selecciona la distancia de carrera",
     options=["10 Km", "21.095 Km", "42.195 Km"],
@@ -39,6 +33,26 @@ elif distancia_opcion == "21.095 Km":
     distancia_max = 21.095
 else:
     distancia_max = 42.195
+
+# Entrada del usuario: altitud de entrenamiento
+alt_entrenamiento = st.number_input("Altitud de entrenamiento (msnm)", min_value=0, max_value=5000, value=500, step=100)
+
+temperaturale = st.number_input("Temperatura entrenamiento (°C)", min_value=12, max_value=40, value=25, step=1)
+temperaturalc = st.number_input("Temperatura carrera (°C)", min_value=12, max_value=40, value=25, step=1)
+
+#distancia_opcion = st.selectbox(
+#    "Selecciona la distancia de carrera",
+#    options=["10 Km", "21.095 Km", "42.195 #Km"],
+#    index=2
+#)
+
+## Convertir selección a número
+#if distancia_opcion == "10 Km":
+#    distancia_max = 10.0
+#elif distancia_opcion == "21.095 Km":
+#    distancia_max = 21.095
+#else:
+#    distancia_max = 42.195
 
 # ============================
 # Subida de altimetría
