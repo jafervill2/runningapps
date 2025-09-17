@@ -20,7 +20,7 @@ st.write("Ingresa tu tiempo ideal de carrera")
 col1, col2 = st.columns(2)
 
 ritmo_min = col1.number_input("Minutos por km", min_value=0, max_value=20, value=5, step=1)
-ritmo_seg = col2.number_input("Segundos", min_value=0, max_value=59, value=0, step=0.25)
+ritmo_seg = col2.number_input("Segundos", min_value=0, max_value=59, value=0, step=1)
 
 # Convertir a decimal en minutos
 ritmo_min_km = ritmo_min + ritmo_seg / 60
