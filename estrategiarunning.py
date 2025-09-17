@@ -5,6 +5,13 @@ import numpy as np
 
 st.title("Simulador de Ritmo Ajustado por Pendiente y Altitud")
 
+def format_hms(segundos):
+    h = int(segundos // 3600)
+    m = int((segundos % 3600) // 60)
+    s = int(segundos % 60)
+    return f"{h:02d}:{m:02d}:{s:02d}"
+
+
 # ============================
 # Entradas de usuario
 # ============================
@@ -18,13 +25,7 @@ ritmo_seg = col2.number_input("Segundos", min_value=0, max_value=59, value=0, st
 # Convertir a decimal en minutos
 ritmo_min_km = ritmo_min + ritmo_seg / 60
 
-st.write(f"Tu ritmo es: {ritmo_min}:{ritmo_seg:02d} min/km")
-
-# Entrada del usuario: altitud de entrenamiento
-alt_entrenamiento = st.number_input("Altitud de entrenamiento (msnm)", min_value=0, max_value=5000, value=500, step=100)
-
-temperaturale = st.number_input("Temperatura entrenamiento (°C)", min_value=12, max_value=40, value=25, step=1)
-temperaturalc = st.number_input("Temperatura carrera (°C)", min_value=12, max_value=40, value=25, step=1)
+st.write(f"Tu ritmo base es: {ritmo_min}:{ritmo_seg:02d} min/km")
 
 distancia_opcion = st.selectbox(
     "Selecciona la distancia de carrera",
@@ -39,6 +40,32 @@ elif distancia_opcion == "21.095 Km":
     distancia_max = 21.095
 else:
     distancia_max = 42.195
+tiempo_base= format_hms(distancia_max*ritmo_min_km*60)
+st.write(f"Tu tiempo base es: {tiempo_base}")# {ritmo_min}:{ritmo_seg:02d} min/km")
+
+st.write("Para realizar cálculos de ajuste por altura y temperatura:")
+
+
+
+# Entrada del usuario: altitud de entrenamiento
+alt_entrenamiento = st.number_input("Altitud de entrenamiento (msnm)", min_value=0, max_value=5000, value=500, step=100)
+
+temperaturale = st.number_input("Temperatura entrenamiento (°C)", min_value=12, max_value=40, value=25, step=1)
+temperaturalc = st.number_input("Temperatura carrera (°C)", min_value=12, max_value=40, value=25, step=1)
+
+#distancia_opcion = st.selectbox(
+#    "Selecciona la distancia de carrera",
+#    options=["10 Km", "21.095 Km", "42.195 #Km"],
+#    index=2
+#)
+
+## Convertir selección a número
+#if distancia_opcion == "10 Km":
+#    distancia_max = 10.0
+#elif distancia_opcion == "21.095 Km":
+#    distancia_max = 21.095
+#else:
+#    distancia_max = 42.195
 
 # ============================
 # Subida de altimetría
@@ -65,14 +92,14 @@ if archivo is not None:
     a = st.number_input("Parámetro a (ajuste de fatiga)%", min_value=-10.0, max_value=10.0, value=0.0, step=0.5, format="%.2f")
     b = st.number_input("Parámetro b (pendiente de la curva sigmoidal)", min_value=0.01, max_value=10.0, value=1.0, step=0.01, format="%.2f")
 
-    
+
     ritmo_seg = ritmo_min_km * 60
     delta_alt = (alt_carrera - alt_entrenamiento) / 1000
     factor_altitud =  delta_alt * 0.02/0.3
     factor_temp = (temperaturalc - temperaturale) * 0.01/5
     ritmo_ajustado_base = ritmo_seg * (1+(factor_altitud + factor_temp))
     #st.success(f"{factor_altitud}: {factor_temp} : {ritmo_ajustado_base)}")
-    
+
     # ============================
     # Interpolación de altimetría
     # ============================
@@ -118,16 +145,12 @@ if archivo is not None:
     df_interp["tiempo_acum_seg"] = df_interp["tiempo_seg"].cumsum()
 
     # Formatos
-    df_interp["ritmo"] = (df_interp["ritmo_seg"] / 60).apply(lambda x: f"{int(x)}:{int((x%1)*60):02d}")
 
-    def format_hms(segundos):
-        h = int(segundos // 3600)
-        m = int((segundos % 3600) // 60)
-        s = int(segundos % 60)
-        return f"{h:02d}:{m:02d}:{s:02d}"
 
+
+    df_interp["ritmo"] = (df_interp["ritmo_seg"] / 60).apply(lambda x: f"{00:02d}:{int(x):02d}:{int((x%1)*60):02d}")
     df_interp["tiempo_acum"] = df_interp["tiempo_acum_seg"].apply(format_hms)
-    
+
     # ============================
     # Mostrar resultados
     # ============================
@@ -149,5 +172,3 @@ if archivo is not None:
     ritmo_medio=format_hms(tiempo_final_seg/distancia_max)
     st.success(f"Tiempo estimado total para {distancia_opcion}: {tiempo_final}")
     st.success(f"Ritmo promedio para {distancia_opcion}: {ritmo_medio} min/Km")
-
-   
