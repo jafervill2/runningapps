@@ -18,7 +18,7 @@ ritmo_seg = col2.number_input("Segundos", min_value=0, max_value=59, value=0, st
 # Convertir a decimal en minutos
 ritmo_min_km = ritmo_min + ritmo_seg / 60
 
-st.write(f"Tu ritmo base es: {ritmo_min}:{ritmo_seg:02d} min/km")
+st.write(f"Tu ritmo base es: ritmo_min_km# {ritmo_min}:{ritmo_seg:02d} min/km")
 
 distancia_opcion = st.selectbox(
     "Selecciona la distancia de carrera",
